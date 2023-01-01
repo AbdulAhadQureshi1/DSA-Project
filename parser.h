@@ -3,73 +3,67 @@
 #include <sstream>
 #include <string>
 #include <vector>
-// #include <dos.h>
+#include <dos.h>
 #include <cstdlib>
 #include <algorithm>
 #include <cctype>
-#include "AVLTree.h"
 
 
-void parseFile() {
+template <typename T>
+T ConvertToType(const string& s) {
+  // Use a stringstream to convert the string to the desired data type
+  stringstream ss(s);
+  T t;
+  ss >> t;
+  return t;
+}
+
+template <typename T>
+AVLTree<T> parse(const string& filename) {
   // Create an instance of the AVLTree class
-  AVLTree <string>tree;
-  int count = 0;
+  AVLTree<T> tree;
 
   // Open the .csv file
-  std::ifstream file("googleplaystore.csv");
+  ifstream file(filename);
 
   // Check if the file was successfully opened
   if (!file.is_open()) {
-    std::cerr << "Error: Could not open file" << std::endl;
-    return ;
+    cerr << "Error: Could not open file" << endl;
+    return tree;
   }
 
+  bool first_line = true; //first line flag
   // Read the file line by line
-    bool first_line = true;
-    std::string line;
-  while (std::getline(file, line)) {
-    // Split the line into fields using a string stream
+  string line = "";
+  while (getline(file, line)) {
+
     // Skip the processing of the first line
     if (first_line) {
       first_line = false;
       continue;
     }
 
+    // Split the line into fields using a string stream
     stringstream ss(line);
-    string field="";   // neccessary
+    string field="";
     vector<string> fields;
+
     while (getline(ss, field, ',')) {
-      // cout << " field: " << field << endl;
-      
       if(field == "NaN") field = "0";
-      transform(field.begin(), field.end(), field.begin(), ::tolower);
+      transform(field.begin(), field.end(), field.begin(), ::tolower); // convert to lowercase.
       fields.push_back(field);
     }
 
+    // if string already, skip conversion
+    if(typeid(fields[0]).name() == "NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE") {
+      T data = fields[0];
+    }
+    else {
     // Convert the fields from strings to the appropriate data type
-    // For example, if the fields contain integers:
-    // for(int i=0; i<16; i++) cout << fields[i] << "---";
-    // cout << fields[0]<<" ";
-    // cout << fields[1]<<" ";
-    // cout << fields[2]<<" ";
-    // cout << fields[3]<<" ";
-    // cout << fields[4]<<" ";
-    // cout << fields[5]<<" ";
-    // cout << fields[6]<<" ";
-    // cout << endl;
-    count++;
-    // double data = std::stod(fields[2]);
-    string data = fields[0];
-
+      T data = ConvertToType<T>(fields[0]);
+    }
     // Insert the data into the AVL tree
-    tree.insert(data);
+    tree.insert(fields[0]);
   }
-  // tree.inorder();
-  cout << count << endl;
-  if(tree.search("zowi app")) {
-    cout << "Zowi app found" << endl;
-  }
-  else {
-    cout << "Zowi app not found" << endl;
-  }
+  return tree;
 }

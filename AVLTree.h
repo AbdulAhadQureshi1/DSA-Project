@@ -19,7 +19,7 @@ struct AVLNode {
 template <typename T>
 class AVLTree {
 public:
-  AVLNode<T>* root;
+  AVLNode<T>* root=nullptr;
 
   bool search(T data) {
     return search(root, data);
