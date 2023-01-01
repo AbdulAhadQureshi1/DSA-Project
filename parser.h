@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cctype>
 
+using namespace std;
 
 template <typename T>
 T ConvertToType(const string& s) {
@@ -19,7 +20,10 @@ T ConvertToType(const string& s) {
 }
 
 template <typename T>
-AVLTree<T> parse(const string& filename) {
+AVLTree<T> parse(const string& filename, map<string, vector<string>> &map) {
+
+  int index = 0;
+  
   // Create an instance of the AVLTree class
   AVLTree<T> tree;
 
@@ -64,6 +68,10 @@ AVLTree<T> parse(const string& filename) {
     }
     // Insert the data into the AVL tree
     tree.insert(fields[0]);
+
+    // Insert App info in the map
+    map[fields[0]] = fields;
+    index++;
   }
   return tree;
 }
