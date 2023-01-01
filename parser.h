@@ -20,9 +20,7 @@ T ConvertToType(const string& s) {
 }
 
 template <typename T>
-AVLTree<T> parse(const string& filename, map<string, vector<string>> &map) {
-
-  int index = 0;
+AVLTree<T> parse(const string& filename, map<T, vector<string>> &map, int columnIndex) {
   
   // Create an instance of the AVLTree class
   AVLTree<T> tree;
@@ -43,7 +41,7 @@ AVLTree<T> parse(const string& filename, map<string, vector<string>> &map) {
 
     // Skip the processing of the first line
     if (first_line) {
-      first_line = false;
+      first_line = false;      
       continue;
     }
 
@@ -53,25 +51,19 @@ AVLTree<T> parse(const string& filename, map<string, vector<string>> &map) {
     vector<string> fields;
 
     while (getline(ss, field, ',')) {
+
       if(field == "NaN") field = "0";
       transform(field.begin(), field.end(), field.begin(), ::tolower); // convert to lowercase.
       fields.push_back(field);
     }
 
-    // if string already, skip conversion
-    if(typeid(fields[0]).name() == "NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE") {
-      T data = fields[0];
-    }
-    else {
     // Convert the fields from strings to the appropriate data type
-      T data = ConvertToType<T>(fields[0]);
-    }
+    T  data = ConvertToType<T>(fields[columnIndex]);
     // Insert the data into the AVL tree
-    tree.insert(fields[0]);
+    tree.insert(data);
 
     // Insert App info in the map
-    map[fields[0]] = fields;
-    index++;
+    map[data] = fields;
   }
   return tree;
 }

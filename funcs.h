@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <cctype>
+#include "linkedList.h"
 using namespace std;
 
 
@@ -31,4 +32,8 @@ void showAppDescription(vector<string> result, int appIndex, map<string, vector<
             cout << colNames[i] << ": " << map[appName][i] << endl;
         }
     }
+}
+
+void addToWishlist(vector<string> result, int appIndex, LinkedList<string> *list) {
+    list->insertNode(result[appIndex-1]);
 }

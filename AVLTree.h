@@ -62,21 +62,32 @@ public:
     return foundApps;
   }
 
+  vector<int> TrendingApps (int threshold) {
+    vector<int> trend;
+    trendingApps(root, threshold, trend);
+    return trend;
+  }
+
 private:
 
   void inorder(AVLNode<T>* node) {
-    if (node == nullptr) {
-      return;
-    }
+    if (node == nullptr) return;
     inorder(node->left);
     cout << node->data << endl;
     inorder(node->right);
   }
 
-  int height(AVLNode<T>* node) {
-    if (node == nullptr) {
-      return 0;
+  void trendingApps(AVLNode<T>* node, int threshold, vector<int> &trending) {
+    if(node == nullptr) return;
+    trendingApps(node->left,threshold, trending);
+    if(node->data > threshold) {
+      trending.push_back(node->data);
     }
+    trendingApps(node->right,threshold, trending);
+  }
+
+  int height(AVLNode<T>* node) {
+    if (node == nullptr) return 0;
     return node->height;
   }
 

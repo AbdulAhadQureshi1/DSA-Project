@@ -35,12 +35,21 @@ class Queue {
             cout << "Queue underflow error!";
             return "";
         } else {
-            struct node * temp = front;
+            node * temp = front;
             string temp_data = front -> data;
             front = front -> next;
             free(temp);
             return temp_data;
         }
+    }
+
+    void display() {
+        cout << "Downloading Apps Queue: ";
+        while(front!=NULL) {
+            cout << front->data << ", ";
+            front = front->next;
+        }
+        cout << endl;
     }
 
 };
