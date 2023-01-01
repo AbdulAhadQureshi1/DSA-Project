@@ -21,10 +21,6 @@ class AVLTree {
 public:
   AVLNode<T>* root=nullptr;
 
-  bool search(T data) {
-    return search(root, data);
-  }
-
   bool compare(T a, T b) {
     return a < b;
   }
@@ -59,6 +55,13 @@ public:
     node->height = 1 + max(height(node->left), height(node->right));
   }
 
+  vector<string> search(string data) {
+    vector<string> words = split(data);
+    vector<string> foundApps;
+    search(root, words, foundApps);
+    return foundApps;
+  }
+
 private:
 
   void inorder(AVLNode<T>* node) {
@@ -82,19 +85,6 @@ private:
       return 0;
     }
     return height(node->left) - height(node->right);
-  }
-
-  bool search(AVLNode<T>* node, T data) {
-    if (node == nullptr) {
-      return false;
-    }
-    if (data < node->data) {
-      return search(node->left, data);
-    } else if (data > node->data) {
-      return search(node->right, data);
-    } else {
-      return true;
-    }
   }
 
   void insert(AVLNode<T>*& node, T data) {
@@ -129,5 +119,27 @@ private:
       rightRotate(node->right);
       leftRotate(node);
     }
+  }
+
+  vector<string> split(string data) {
+    vector<string> words;
+    istringstream iss(data);
+    for (string word; iss >> word; ) {
+      words.push_back(word);
+    }
+    return words;
+  }
+
+  void search(AVLNode<T>* node, vector<string> words, vector<string> &foundApps) {
+    if (node == nullptr) {
+      return;
+    }
+    for (const string& word : words) {
+      if (node->data.find(word) != string::npos) {
+        foundApps.push_back(node->data);
+      }
+    }
+    search(node->left, words, foundApps);
+    search(node->right, words, foundApps);
   }
 };

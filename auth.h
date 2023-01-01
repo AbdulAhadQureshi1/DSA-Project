@@ -41,17 +41,17 @@ bool logIn(fstream& file) {
   string line;
   while (getline(file, line)) {
   // Extract the name, username, and password from the line
-  int i = line.find(',');
-  string name = line.substr(0, i);
-  int j = line.find(',', i + 1);
-  string fileUsername = line.substr(i + 1, j - i - 1);
-  string filePassword = line.substr(j + 1);
+    int i = line.find(',');
+    string name = line.substr(0, i);
+    int j = line.find(',', i + 1);
+    string fileUsername = line.substr(i + 1, j - i - 1);
+    string filePassword = line.substr(j + 1);
 
-  // Check if the entered username and password match the ones in the file
-  if (username == fileUsername && password == filePassword) {
-    cout << "Logged in successfully as " << name << "." << endl;
-    return true;
-  }
+    // Check if the entered username and password match the ones in the file
+    if (username == fileUsername && password == filePassword) {
+      cout << "Logged in successfully as " << name << "." << endl;
+      return true;
+    }
   }
 
   // If we reach here, the username and password did not match any in the file
@@ -73,15 +73,17 @@ bool authMain() {
   switch (choice) {
     case 1:
       signUp(file);
+      cout << "Successfully Signed Up!" << endl;
       break;
     case 2:
       // Open the file in input mode
       file.close();
       file.open("credentials.txt", ios::in);
-      logIn(file);
+      return logIn(file);
       break;
   }
 
   // Close the file
   file.close();
+  return false;
 }
