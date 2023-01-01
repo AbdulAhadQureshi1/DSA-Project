@@ -4,7 +4,8 @@
         "ostream": "cpp",
         "cstdlib": "cpp",
         "iosfwd": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "map": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

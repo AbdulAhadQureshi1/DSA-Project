@@ -1,11 +1,14 @@
 #include<iostream>
 #include <typeinfo>
 #include <map>
+#include <sstream>
+#include <fstream>
 #include "AVLTree.h"
 #include "parser.h"
 #include "auth.h"
 #include "queue.h"
 #include "funcs.h"
+#include "pages.h"
 using namespace std;
 
 
@@ -17,16 +20,19 @@ int main()
     LinkedList<string> *wishlist = new LinkedList<string>;
 
     cout << "Welcome to PlayStore My G" << endl;
-    while(!authMain()) {
+    string logged_user = ""; // logged-in username will be stored here
+    while(!authMain(logged_user)) {
         cout << "Authenticate yourself please:" << endl;
     }
+
+    downloads->display();
 
     int choice = 0;
 
     while(true) {
-        cout << "What do you wanna do: \n1.Search\n2.Trending Apps\n3.Show Downloaded Apps\n4.Show Wishlist\n5.Quit\n>>> ";
+        cout << "What do you wanna do: \n1.Search\n2.Trending Apps\n3.Education Apps\n4.Show Downloaded Apps\n5.Show Wishlist\n6.Quit\n>>> ";
         cin >> choice;
-        if(choice == 5) break;
+        if(choice == 6) break;
 
         string search = "";
         
@@ -42,29 +48,7 @@ int main()
 
                 transform(search.begin(), search.end(), search.begin(), ::tolower);
                 vector<string> result = SearchResults(tree, search);
-                int appNo;
-                cout << "Enter index of desired app: ";
-                cin >> appNo;
-                int appInst = 0;
-
-                while(appInst != 4){
-                    cout << "Choose what to do with the app:\n1.Full Description\n2.Download\n3.Add to wishlist\n4.Go Back\n>>> ";
-                    cin >> appInst;
-                    switch (appInst){
-                        case 1:
-                            showAppDescription(result, appNo, appMap);
-                            break;
-                        case 2:
-                            DownloadApp(result, appNo, downloads);
-                            break;
-                        case 3:
-                            addToWishlist(result, appNo, wishlist);
-                            break;
-                        
-                        default:
-                            break;
-                    }
-                }
+                askAppInst(appMap, result, downloads, wishlist, logged_user);
             }
         }
         else if(choice == 2) {
@@ -72,25 +56,19 @@ int main()
             AVLTree<int> tree_two = parse<int>("googleplaystore.csv", appMap, 3);
             const int POPULARITY_THRESHOLD = 1000000;
             vector<int> trendingApps = tree_two.TrendingApps(POPULARITY_THRESHOLD);
-            vector<string> colNames = {"Name", "Category", "Rating", "Reviews", "Size", "Installs", "Type", "Price", "Content Rating", "Genres", "Last Updated", "Current Version", "Android Version"};
-            for(int i=0; i<colNames.size(); i++) {
-                cout << colNames[i] << " | ";
-            }
-            cout << endl;
-            for(int i=0; i<trendingApps.size(); i++) {
-                int app = trendingApps[i];
-                if(appMap.find(app)!=appMap.end()){
-                    for(int j=0; j<(appMap[app]).size(); j++) {
-                        cout << appMap[app][j] << " | ";
-                    }
-                    cout << endl;
-                }
-            }
+            vector<string> trendingAppNames = showTrendingApps(trendingApps, appMap);
         }
-        else if(choice == 3) {
-            downloads->display();
+        else if (choice == 3) {
+            map<string, vector<string>> appMap;
+            AVLTree<string> education_tree = parse<string>("googleplaystore.csv", appMap, 9);
+            vector<string> apps = education_tree.search("education");
+            apps = showEducationalApps(appMap, apps);
+            askAppInst(appMap, apps, downloads, wishlist, logged_user);
         }
         else if(choice == 4) {
+            downloads->display();
+        }
+        else if(choice == 5) {
             wishlist->printList();
         }
     }

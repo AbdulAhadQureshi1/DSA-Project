@@ -28,7 +28,7 @@ void signUp(fstream& file) {
 }
 
 // Function to log in an existing user
-bool logIn(fstream& file) {
+bool logIn(fstream& file, string &user) {
   string username, password;
 
   // Get user input for username and password
@@ -50,6 +50,7 @@ bool logIn(fstream& file) {
     // Check if the entered username and password match the ones in the file
     if (username == fileUsername && password == filePassword) {
       cout << "Logged in successfully as " << name << "." << endl;
+      user = name;
       return true;
     }
   }
@@ -59,8 +60,8 @@ bool logIn(fstream& file) {
   return false;
 }
 
-bool authMain() {
-    // Open the file in append mode
+bool authMain(string &user) {
+  // Open the file in append mode
   fstream file("credentials.txt", ios::app);
 
   // Sign up or log in
@@ -79,7 +80,7 @@ bool authMain() {
       // Open the file in input mode
       file.close();
       file.open("credentials.txt", ios::in);
-      return logIn(file);
+      return logIn(file, user);
       break;
   }
 

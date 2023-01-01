@@ -22,9 +22,10 @@ class LinkedList {
     void printList() {
         loc = start;
         while( loc!=nullptr ) {
-            cout << loc->data <<endl;
+            cout << loc->data << " ";
             loc = loc->next;
         }
+        cout << endl;
     }
 
     void insertNode(T data) {
