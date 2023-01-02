@@ -19,13 +19,12 @@ int main()
     Queue *downloads = new Queue();
     LinkedList<string> *wishlist = new LinkedList<string>;
 
-    cout << "Welcome to PlayStore My G" << endl;
+    cout << "Welcome to PlayStore!" << endl;
     string logged_user = ""; // logged-in username will be stored here
     while(!authMain(logged_user)) {
         cout << "Authenticate yourself please:" << endl;
     }
 
-    downloads->display();
 
     int choice = 0;
 

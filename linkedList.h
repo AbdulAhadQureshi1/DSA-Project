@@ -20,6 +20,7 @@ class LinkedList {
 
 // For my ease of use and ease of debugging
     void printList() {
+        cout << "Wishlist: ";
         loc = start;
         while( loc!=nullptr ) {
             cout << loc->data << " ";
