@@ -1,11 +1,20 @@
 {
-    "files.associations": {
-        "iostream": "cpp",
-        "ostream": "cpp",
-        "cstdlib": "cpp",
-        "iosfwd": "cpp",
-        "string": "cpp",
-        "map": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "enabled"
+  "files.associations": {
+    "iostream": "cpp",
+    "ostream": "cpp",
+    "cstdlib": "cpp",
+    "iosfwd": "cpp",
+    "string": "cpp",
+    "map": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "enabled",
+  "task.allowAutomaticTasks": true,
+  "debug.openDebug": "neverOpen",
+  "terminal.integrated.inheritEnv": false,
+  "tasks": {
+    "label": "lint on open",
+    "type": "shell",
+    "command": "npm run lint",
+    "runOn": "folderOpen"
+  }
 }
